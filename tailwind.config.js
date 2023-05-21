@@ -17,5 +17,5 @@ module.exports = {
     },
 
     plugins: [require('@tailwindcss/forms')],
-    lugins: [require("@tailwindcss/typography"), require("daisyui")],
+    plugins: [require("@tailwindcss/typography"), require("daisyui")],
 };
