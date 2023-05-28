@@ -11,23 +11,39 @@ class UsersController extends Controller
 {
     public function index()
     {
-        // ユーザー一覧をidの降順で取得
-        $users = User::orderBy('id', 'desc')->paginate(10);
+         $data = [];
+        if (\Auth::check()) { // 認証済みの場合
+            // 認証済みユーザを取得
+            $user = \Auth::user();
+            // ユーザの投稿の一覧を作成日時の降順で取得
+            // （後のChapterで他ユーザの投稿も取得するように変更しますが、現時点ではこのユーザの投稿のみ取得します）
+            $microposts = $user->microposts()->orderBy('created_at', 'desc')->paginate(10);
+            $data = [
+                'user' => $user,
+                'microposts' => $microposts,
+            ];
+        }
         
-        // ユーザー一覧ビューでそれを表示
-        return view('users.index', [
-           'users' => $users, 
-        ]);
+        // dashboardビューでそれらを表示
+        return view('dashboard', $data);
     }
+
     
     public function show($id)
-    {
+    {   
         // idの値でユーザを検索して取得
         $user = User::findOrFail($id);
         
+        // 関係するモデルの件数をロード
+        $user->loadRelationshipCounts();
+        
+        // ユーザーの投稿一覧を作成日時の降順で取得
+        $microposts = $user->microposts()->orderBy('created_at', 'desc')->paginate(10);
+
         // ユーザ詳細ビューでそれを表示
         return view('users.show', [
             'user' => $user,
+            'microposts' => $microposts,
         ]);
     }
     
@@ -77,5 +93,4 @@ class UsersController extends Controller
             'users' => $followers,
         ]);
     }
-
 }

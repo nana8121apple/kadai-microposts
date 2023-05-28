@@ -42,11 +42,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
+    /**
+     * このユーザが所有する投稿。（ Micropostモデルとの関係を定義）
+     */
     public function microposts()
     {
         return $this->hasMany(Micropost::class);
     }
     
+     /**
+     * このユーザに関係するモデルの件数をロードする。
+     */
     public function loadRelationshipCounts()
     {
         $this->loadCount(['microposts', 'followings', 'followers']);
@@ -125,5 +131,4 @@ class User extends Authenticatable
         // それらのユーザが所有する投稿に絞り込む
         return Micropost::whereIn('user_id', $userIds);
     }
-    
 }
