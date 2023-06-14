@@ -11,8 +11,8 @@ class FavoritesController extends Controller
      */
     public function store($id)
     {
-        // 認証済みユーザ（閲覧者）が、 idのユーザをフォローする
-        \Auth::user()->favorite($micropost);
+        // 認証済みユーザ（閲覧者）が、 idの投稿をお気に入りする
+        \Auth::user()->favorite($id);
         // 前のURLへリダイレクトさせる
         return back();
     }
@@ -22,7 +22,7 @@ class FavoritesController extends Controller
      */
     public function destroy($id)
     {
-        // 認証済みユーザ（閲覧者）が、 idのユーザをアンフォローする
+        // 認証済みユーザ（閲覧者）が、 idの投稿解除する
         \Auth::user()->unfavorite($id);
         // 前のURLへリダイレクトさせる
         return back();
